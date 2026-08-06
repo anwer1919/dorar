@@ -1,13 +1,14 @@
 /* ═══════════════════════════════════════════
-   درر للعطور والبخور — script.js (v2 Catalog)
+   درر للعطور والبخور — script.js (Final)
    ═══════════════════════════════════════════ */
 (() => {
   'use strict';
 
-  /* ── الإعدادات: غيّر الأرقام هنا ── */
+  /* ── الإعدادات ── */
   const CONFIG = {
-    whatsapp: '+201507794284',
-    phone: '+201507794284'
+    whatsapp: '201507794284',      // واتساب الصفحة الأساسي (الطلبات)
+    phone: '+201507794284',        // هاتف الصفحة الأساسي
+    devWhatsapp: '249998989999'    // واتساب المطور anwer ahmed
   };
 
   const $ = s => document.querySelector(s);
@@ -54,7 +55,6 @@
     } finally { hideLoader(); }
   }
 
-  /* ── النتائج بعد الفلترة ── */
   const getFiltered = () => state.products.filter(p =>
     (state.activeCat === 'all' || p.category === state.activeCat) &&
     (!state.query || p._search.includes(state.query)));
@@ -77,7 +77,7 @@
     applyFilters();
   });
 
-  /* ── قائمة المنتجات (Index) مجمّعة بالفئات ── */
+  /* ── قائمة المنتجات مجمّعة بالفئات ── */
   function buildIndex(filtered) {
     const groups = new Map();
     filtered.forEach(p => {
@@ -155,7 +155,6 @@
     </article>`;
   }
 
-  /* ── اختيار منتج ── */
   function select(id, scrollToDetail = false) {
     state.selectedId = id;
     $$('.idx-item').forEach(b => b.classList.toggle('active', b.dataset.id === id));
@@ -165,7 +164,6 @@
     }
   }
 
-  /* ── تطبيق البحث والفلاتر ── */
   function applyFilters(initial = false) {
     const filtered = getFiltered();
     countEl.textContent = filtered.length ? `${filtered.length} منتج` : '';
@@ -195,7 +193,6 @@
     applyFilters();
   });
 
-  /* ── نقرات القائمة والتفاصيل ── */
   indexBox.addEventListener('click', e => {
     const item = e.target.closest('.idx-item');
     if (item) select(item.dataset.id, true);
@@ -283,6 +280,7 @@
   ['#waFloat', '#waLink'].forEach(s => $(s).href = waHref);
   ['#phoneFloat', '#phoneLink'].forEach(s => $(s).href = `tel:${CONFIG.phone}`);
   $('#year').textContent = new Date().getFullYear();
+  $('#devWa').href = `https://wa.me/${CONFIG.devWhatsapp}?text=${encodeURIComponent('السلام عليكم، بخصوص تطوير موقع درر للعطور والبخور')}`;
 
   function hideLoader() { setTimeout(() => $('#loader').classList.add('done'), 450); }
 
