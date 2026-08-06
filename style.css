@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   درر للعطور والبخور — Luxury Gold Theme v2
+   درر للعطور والبخور — Luxury Gold Theme (Final)
    ═══════════════════════════════════════════ */
 
 :root{
@@ -42,19 +42,19 @@ button{font-family:inherit;cursor:pointer}
 /* ---------- Loader ---------- */
 #loader{position:fixed;inset:0;z-index:999;display:flex;flex-direction:column;gap:18px;align-items:center;justify-content:center;background:var(--bg);transition:opacity .7s,visibility .7s}
 #loader.done{opacity:0;visibility:hidden}
-.loader-crest{width:90px;animation:pulse 1.8s ease-in-out infinite}
+.loader-crest{width:120px;height:auto;mix-blend-mode:multiply;animation:pulse 1.8s ease-in-out infinite}
 .loader-brand{font-size:1.6rem;background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .loader-ring{width:34px;height:34px;border-radius:50%;border:3px solid var(--line-soft);border-top-color:var(--gold-3);animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pulse{50%{transform:scale(1.08);filter:drop-shadow(0 0 14px rgba(201,162,39,.55))}}
+@keyframes pulse{50%{transform:scale(1.06);filter:drop-shadow(0 0 14px rgba(201,162,39,.55))}}
 
 /* ---------- Header ---------- */
 #siteHeader{position:sticky;top:0;z-index:100;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:box-shadow .35s}
 #siteHeader::after{content:"";display:block;height:1.5px;margin-inline:auto;max-width:1180px;background:linear-gradient(90deg,transparent,var(--gold-3),transparent);opacity:.7}
 #siteHeader.scrolled{box-shadow:0 8px 24px rgba(122,91,0,.12)}
-.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:10px}
 .brand{display:flex;align-items:center;gap:12px}
-.brand-crest{width:46px;filter:drop-shadow(0 3px 6px rgba(166,124,0,.3))}
+.brand-crest{width:52px;height:52px;object-fit:contain;mix-blend-mode:multiply}
 .brand-name{font-size:1.5rem;font-weight:700;line-height:1.15;background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .brand-name small{display:block;font-family:'Cairo';font-size:.68rem;font-weight:600;color:var(--muted);-webkit-text-fill-color:var(--muted)}
 .main-nav{display:flex;gap:26px}
@@ -73,7 +73,7 @@ button{font-family:inherit;cursor:pointer}
 .hero{position:relative;min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:var(--hero-bg);padding:70px 20px}
 .hero-content{position:relative;z-index:2;animation:heroFade 1.4s ease both}
 @keyframes heroFade{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
-.hero-crest{width:120px;margin:0 auto 14px;filter:drop-shadow(0 6px 18px rgba(166,124,0,.35));animation:pulse 4s ease-in-out infinite}
+.hero-crest{width:200px;height:auto;margin:0 auto 10px;mix-blend-mode:multiply;animation:pulse 4s ease-in-out infinite}
 .hero-title{font-size:clamp(2.6rem,7.5vw,5rem);font-weight:700;line-height:1.35;background:var(--gold-grad);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite;filter:drop-shadow(0 2px 4px rgba(166,124,0,.2))}
 @keyframes shine{to{background-position:200% center}}
 .ornament{width:250px;height:24px;margin:6px auto;opacity:.9}
@@ -84,6 +84,14 @@ button{font-family:inherit;cursor:pointer}
 @keyframes bob{50%{transform:translateY(8px)}}
 #particles span{position:absolute;bottom:-12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff7d6,var(--gold-3) 60%,transparent);animation:floatUp linear infinite;opacity:0;pointer-events:none}
 @keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:0}10%{opacity:.75}90%{opacity:.4}100%{transform:translateY(-100vh) scale(.5);opacity:0}}
+
+/* ---------- Logo in dark mode ---------- */
+[data-theme="dark"] .loader-crest,
+[data-theme="dark"] .brand-crest,
+[data-theme="dark"] .hero-crest{
+  mix-blend-mode:normal;background:#fffdf7;border-radius:16px;padding:6px;box-shadow:var(--shadow);
+}
+[data-theme="dark"] .brand-crest{border-radius:12px;padding:4px}
 
 /* ---------- Buttons ---------- */
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 30px;border-radius:999px;font-weight:800;font-size:1rem;border:none;transition:transform .3s,box-shadow .3s}
@@ -119,10 +127,9 @@ button{font-family:inherit;cursor:pointer}
 .chip.active{background:var(--gold-grad);border-color:transparent;color:#31250a;box-shadow:var(--shadow-glow)}
 @keyframes riseIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
 
-/* ═══════════ Catalog (الدليل الفاخر) ═══════════ */
+/* ═══════════ Catalog ═══════════ */
 .catalog-layout{display:grid;grid-template-columns:330px 1fr;gap:28px;align-items:start;margin-bottom:70px}
 
-/* — قائمة المنتجات — */
 .catalog-index{position:sticky;top:96px;max-height:calc(100vh - 130px);overflow-y:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 16px;box-shadow:var(--shadow)}
 .catalog-index::-webkit-scrollbar{width:6px}
 .catalog-index::-webkit-scrollbar-thumb{background:var(--gold-3);border-radius:6px}
@@ -136,7 +143,6 @@ button{font-family:inherit;cursor:pointer}
 .idx-item.active .idx-dot{color:#31250a}
 .idx-dot{color:var(--gold-3);font-size:.7rem;transition:color .3s}
 
-/* — لوحة التفاصيل — */
 .detail-card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:26px;padding:46px 38px 38px;box-shadow:var(--shadow);animation:detailIn .55s ease both}
 @keyframes detailIn{from{opacity:0;transform:translateY(24px) scale(.985)}to{opacity:1;transform:none}}
 .detail-card::before,.detail-card::after{content:"";position:absolute;width:44px;height:44px;border:3px solid var(--gold-3);opacity:.85;pointer-events:none}
@@ -157,7 +163,6 @@ button{font-family:inherit;cursor:pointer}
 [data-theme="dark"] .stat b{color:var(--gold-2)}
 .stat span{font-size:.76rem;color:var(--muted);font-weight:700}
 
-/* — جدول الأسعار — */
 .table-wrap{border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 8px 22px rgba(166,124,0,.09)}
 .price-table{width:100%;border-collapse:collapse;font-size:1rem}
 .price-table thead th{background:var(--gold-grad);color:#31250a;font-weight:800;padding:12px 16px;font-size:.92rem}
@@ -168,7 +173,6 @@ button{font-family:inherit;cursor:pointer}
 .price-table tbody tr{animation:rowIn .45s ease both;animation-delay:calc(var(--i) * 70ms + .15s)}
 @keyframes rowIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
 
-/* — أزرار وإجراءات — */
 .card-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px}
 .act-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--muted);font-size:.86rem;font-weight:800;transition:all .3s}
 .act-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
@@ -216,6 +220,9 @@ footer{background:#221a0b;color:#e8dab0}
 .footer-links a{font-weight:700;font-size:.92rem;transition:color .3s}
 .footer-links a:hover{color:var(--gold-2)}
 .footer-bottom{border-top:1px solid rgba(201,162,39,.2);text-align:center;padding-block:16px;font-size:.85rem;color:#bda76e}
+.dev-line{margin-top:6px;font-size:.8rem}
+.dev-line a{color:var(--gold-2);font-weight:800;border-bottom:1px dashed var(--gold-3);transition:color .3s}
+.dev-line a:hover{color:#fff}
 
 /* ---------- Floating ---------- */
 .float-btn{position:fixed;z-index:90;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:transform .3s;border:none}
@@ -249,6 +256,7 @@ footer{background:#221a0b;color:#e8dab0}
 @media (max-width:620px){
   .main-nav{display:none}
   .hero{min-height:80vh}
+  .hero-crest{width:150px}
   .section-head .ornament{width:80px}
   .detail-card{padding:38px 22px 28px}
   .float-btn{width:50px;height:50px}
