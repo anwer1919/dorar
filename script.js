@@ -1,28 +1,29 @@
 /* ═══════════════════════════════════════════
-   درر للعطور والبخور — script.js (Final: كاروسيل + 11 صورة)
+   درر للعطور والبخور — script.js (Final: 12 تصنيف + كاروسيل)
    ═══════════════════════════════════════════ */
 (() => {
   'use strict';
 
   const CONFIG = {
-    whatsapp: '201507794384',      // واتساب الصفحة الأساسي
-    phone: '+201507794384',
-    devWhatsapp: '249998989999'    // واتساب المطور
+    whatsapp: '201507794384',      // واتساب الصفحة الأساسي (الطلبات)
+    phone: '+201507794384',        // هاتف الصفحة الأساسي
+    devWhatsapp: '249998989999'    // واتساب المطور anwer ahmed
   };
 
-  /* ── صورة خاصة لكل قسم (بدون تكرار) ── */
+  /* ── صورة خاصة لكل تصنيف ── */
   const IMG = {
     'الخمرة السودانية':  'images/khomra.jpg',
     'الخمر الفرنسية':     'images/french.jpg',
     'الدلكة السودانية':  'images/dilka.jpg',
     'دلكة محلب':         'images/dilka-mahlab.jpg',
-    'البخورات':          'images/bakhoor.jpg',
+    'بخورات الشاف':      'images/bakhoor.jpg',
     'بخورات العنفر':     'images/anbar.jpg',
     'بخورات الصندل':     'images/sandal.jpg',
-    'عود الحرم':         'images/oud.jpg',
-    'اعود الحرم':        'images/oud-haram.jpg',
-    'مخمريه العروس جات': 'images/mukh.jpg',
-    'لمسة محلب':         'images/lamsa.jpg'
+    'بخورات القهوه':     'images/oud-haram.jpg',
+    'مخمريات نسائيه':    'images/mukh.jpg',
+    'لمسة محلب':         'images/lamsa.jpg',
+    'بخاخات درر':        'images/french.jpg',
+    'مرشات':             'images/lamsa.jpg'
   };
 
   const catImage = cat => {
@@ -33,15 +34,17 @@
     if (c.includes('دلكة'))   return IMG['الدلكة السودانية'];
     if (c.includes('عنفر'))   return IMG['بخورات العنفر'];
     if (c.includes('صندل'))   return IMG['بخورات الصندل'];
-    if (c.includes('بخور'))   return IMG['البخورات'];
-    if (c.includes('مخمر'))   return IMG['مخمريه العروس جات'];
-    if (c.includes('حرم'))    return IMG['عود الحرم'];
+    if (c.includes('شاف'))    return IMG['بخورات الشاف'];
+    if (c.includes('قهوه') || c.includes('بخور')) return IMG['بخورات القهوه'];
+    if (c.includes('مخمر'))   return IMG['مخمريات نسائيه'];
+    if (c.includes('بخاخ'))   return IMG['بخاخات درر'];
+    if (c.includes('مرش'))    return IMG['مرشات'];
     if (c.includes('لمسة'))   return IMG['لمسة محلب'];
     if (c.includes('خمرة'))   return IMG['الخمرة السودانية'];
     return 'logo.png';
   };
 
-  /* صورة المنتج: حقل image ← images/الآيدي.jpg ← صورة القسم */
+  /* صورة المنتج: حقل image ← images/الآيدي.jpg ← صورة التصنيف */
   const imgFor = p => p.image || `images/${p.id}.jpg`;
   const imgFallback = p => `this.onerror=null;this.src='${catImage(p.category)}'`;
 
@@ -61,7 +64,7 @@
 
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 
-  const AR = '٠١٢٤٥٦٧٨٩';
+  const AR = '٠١٢٤٥٦٨٩';
   const normalize = t => (t || '').toString()
     .replace(/[\u064B-\u0652\u0640]/g, '')
     .replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي')
@@ -96,7 +99,7 @@
     (state.activeCat === 'all' || p.category === state.activeCat) &&
     (!state.query || p._search.includes(state.query)));
 
-  /* ── الفلاتر ── */
+  /* ── الفلاتر العلوية ── */
   function buildChips() {
     const cats = [...new Set(state.products.map(p => p.category))];
     chipsBox.innerHTML = chipHTML('all', 'كل المنتجات', 0) +
@@ -110,7 +113,7 @@
     if (chip) setActiveCat(chip.dataset.cat, true);
   });
 
-  /* ── الكاروسيل ── */
+  /* ── الكاروسيل (سحب يمين/يسار) ── */
   function buildCarousel() {
     const cats = [...new Set(state.products.map(p => p.category))];
     carousel.innerHTML = cats.map((c, i) => {
@@ -152,7 +155,7 @@
     }, 120);
   }, { passive: true });
 
-  /* ── تفعيل قسم (مزامنة chips + كاروسيل + منتجات) ── */
+  /* ── تفعيل تصنيف (مزامنة chips + كاروسيل + منتجات) ── */
   function setActiveCat(cat, scrollCarousel = false) {
     state.activeCat = cat;
     $$('.chip').forEach(c => c.classList.toggle('active', c.dataset.cat === cat));
@@ -301,6 +304,7 @@
     if (e.target.closest('[data-share]')) shareProduct(p);
   });
 
+  /* ── نسخ ومشاركة ── */
   const productText = p =>
     `${p.name} — ${p.category}\n` +
     p.sizes.map(s => `${s.size} : ${s.price} ${currency}`).join('\n') +
@@ -329,6 +333,7 @@
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
   }
 
+  /* ── الوضع الليلي ── */
   const setTheme = t => {
     document.documentElement.dataset.theme = t;
     try { localStorage.setItem('durar-theme', t); } catch { /* خاص */ }
@@ -342,6 +347,7 @@
   $('#themeToggle').addEventListener('click', () =>
     setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
 
+  /* ── الجزيئات العائمة ── */
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const box = $('#particles');
     for (let i = 0; i < 26; i++) {
@@ -353,6 +359,7 @@
     }
   }
 
+  /* ── التمرير ── */
   const header = $('#siteHeader'), backTop = $('#backTop');
   addEventListener('scroll', () => {
     header.classList.toggle('scrolled', scrollY > 12);
@@ -365,6 +372,7 @@
     { threshold: 0.12 });
   $$('.fade-section').forEach(el => io.observe(el));
 
+  /* ── روابط التواصل ── */
   const waHref = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent('السلام عليكم، أرغب في الاستفسار عن منتجات درر للعطور والبخور')}`;
   ['#waFloat', '#waLink'].forEach(s => $(s).href = waHref);
   ['#phoneFloat', '#phoneLink'].forEach(s => $(s).href = `tel:${CONFIG.phone}`);
