@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   درر للعطور والبخور — script.js (Final)
+   درر للعطور والبخور — script.js (بدون بحث)
    ═══════════════════════════════════════════ */
 (() => {
   'use strict';
@@ -50,26 +50,17 @@
   const $ = s => document.querySelector(s);
   const $$ = s => [...document.querySelectorAll(s)];
 
-  const state = { products: [], byId: new Map(), activeCat: 'all', query: '', selectedId: null };
+  const state = { products: [], byId: new Map(), activeCat: 'all', selectedId: null };
   let currency = 'جنيه';
 
   const indexBox = $('#catalogIndex'), detailBox = $('#catalogDetail'),
         layout = $('#catalogLayout'), chipsBox = $('#chips'), emptyBox = $('#empty'),
-        input = $('#searchInput'), clearBtn = $('#searchClear'),
         toast = $('#toast'),
         carousel = $('#catCarousel');
 
   let suppressScroll = false;
 
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
-
-  const AR = '٠١٢٣٤٥٦٧٨٩';
-  const normalize = t => (t || '').toString()
-    .replace(/[\u064B-\u0652\u0640]/g, '')
-    .replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي')
-    .replace(/ؤ/g, 'و').replace(/ئ/g, 'ي').replace(/ة/g, 'ه')
-    .replace(/[٠-٩]/g, d => AR.indexOf(d))
-    .trim();
 
   /* ── تحميل البيانات ── */
   async function loadData() {
@@ -78,11 +69,7 @@
       if (!res.ok) throw new Error(res.status);
       const data = await res.json();
       currency = data.currency || 'جنيه';
-      state.products = data.products.map(p => ({
-        ...p,
-        _search: normalize([p.name, p.category, p.tagline, p.weight,
-          ...(p.keywords || []), ...p.sizes.flatMap(s => [s.size, s.price])].join(' '))
-      }));
+      state.products = data.products.map(p => ({ ...p }));
       state.products.forEach(p => state.byId.set(p.id, p));
       buildChips();
       buildCarousel();
@@ -95,8 +82,7 @@
   }
 
   const getFiltered = () => state.products.filter(p =>
-    (state.activeCat === 'all' || p.category === state.activeCat) &&
-    (!state.query || p._search.includes(state.query)));
+    (state.activeCat === 'all' || p.category === state.activeCat));
 
   /* ── الفلاتر العلوية ── */
   function buildChips() {
@@ -261,7 +247,6 @@
 
   function applyFilters(initial = false) {
     const filtered = getFiltered();
-    clearBtn.hidden = !input.value;
 
     if (!filtered.length) {
       layout.hidden = true; emptyBox.hidden = false; return;
@@ -273,16 +258,7 @@
     if (initial || !stillVisible) select(filtered[0].id);
   }
 
-  input.addEventListener('input', () => { state.query = normalize(input.value); applyFilters(); });
-  input.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { input.value = ''; state.query = ''; applyFilters(); }
-  });
-  clearBtn.addEventListener('click', () => { input.value = ''; state.query = ''; applyFilters(); input.focus(); });
-  $$('.example-chip').forEach(b => b.addEventListener('click', () => {
-    input.value = b.dataset.q; state.query = normalize(b.dataset.q); applyFilters(); input.focus();
-  }));
   $('#resetFilters').addEventListener('click', () => {
-    input.value = ''; state.query = '';
     setActiveCat('all');
   });
 
