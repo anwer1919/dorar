@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   درر للعطور والبخور — script.js (Final: 12 تصنيف + كاروسيل)
+   درر للعطور والبخور — script.js (Final)
    ═══════════════════════════════════════════ */
 (() => {
   'use strict';
@@ -44,7 +44,6 @@
     return 'logo.png';
   };
 
-  /* صورة المنتج: حقل image ← images/الآيدي.jpg ← صورة التصنيف */
   const imgFor = p => p.image || `images/${p.id}.jpg`;
   const imgFallback = p => `this.onerror=null;this.src='${catImage(p.category)}'`;
 
@@ -57,14 +56,14 @@
   const indexBox = $('#catalogIndex'), detailBox = $('#catalogDetail'),
         layout = $('#catalogLayout'), chipsBox = $('#chips'), emptyBox = $('#empty'),
         input = $('#searchInput'), clearBtn = $('#searchClear'),
-        countEl = $('#resultCount'), toast = $('#toast'),
+        toast = $('#toast'),
         carousel = $('#catCarousel');
 
   let suppressScroll = false;
 
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 
-  const AR = '٠١٢٤٥٦٨٩';
+  const AR = '٠١٢٣٤٥٦٧٨٩';
   const normalize = t => (t || '').toString()
     .replace(/[\u064B-\u0652\u0640]/g, '')
     .replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي')
@@ -113,7 +112,7 @@
     if (chip) setActiveCat(chip.dataset.cat, true);
   });
 
-  /* ── الكاروسيل (سحب يمين/يسار) ── */
+  /* ── الكاروسيل ── */
   function buildCarousel() {
     const cats = [...new Set(state.products.map(p => p.category))];
     carousel.innerHTML = cats.map((c, i) => {
@@ -132,7 +131,6 @@
     if (slide) setActiveCat(slide.dataset.cat, true);
   });
 
-  /* عند السحب: اكتشف القسم الأوسط وفعّله */
   let scrollTimer;
   carousel.addEventListener('scroll', () => {
     if (suppressScroll) return;
@@ -155,7 +153,6 @@
     }, 120);
   }, { passive: true });
 
-  /* ── تفعيل تصنيف (مزامنة chips + كاروسيل + منتجات) ── */
   function setActiveCat(cat, scrollCarousel = false) {
     state.activeCat = cat;
     $$('.chip').forEach(c => c.classList.toggle('active', c.dataset.cat === cat));
@@ -264,7 +261,6 @@
 
   function applyFilters(initial = false) {
     const filtered = getFiltered();
-    countEl.textContent = filtered.length ? `${filtered.length} منتج` : '';
     clearBtn.hidden = !input.value;
 
     if (!filtered.length) {
