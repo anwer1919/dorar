@@ -1,15 +1,37 @@
 /* ═══════════════════════════════════════════
-   درر للعطور والبخور — script.js (Final)
+   درر للعطور والبخور — script.js (مع الصور)
    ═══════════════════════════════════════════ */
 (() => {
   'use strict';
 
-  /* ── الإعدادات ── */
   const CONFIG = {
-    whatsapp: '201507794384',      // واتساب الصفحة الأساسي (الطلبات)
-    phone: '+201507794384',        // هاتف الصفحة الأساسي
-    devWhatsapp: '249998989999'    // واتساب المطور anwer ahmed
+    whatsapp: '201507794384',      // واتساب الصفحة الأساسي
+    phone: '+201507794384',
+    devWhatsapp: '249998989999'    // واتساب المطور
   };
+
+  /* ── صور افتراضية حسب التصنيف ── */
+  const IMG = {
+    khomra:  'images/khomra.jpg',
+    french:  'images/french.jpg',
+    dilka:   'images/dilka.jpg',
+    bakhoor: 'images/bakhoor.jpg',
+    oud:     'images/oud.jpg',
+    mukh:    'images/mukh.jpg'
+  };
+  const catImage = cat => {
+    cat = cat || '';
+    if (cat.includes('فرنسية')) return IMG.french;
+    if (cat.includes('دلكة'))   return IMG.dilka;
+    if (cat.includes('بخور') || cat.includes('عنفر') || cat.includes('صندل')) return IMG.bakhoor;
+    if (cat.includes('مخمر'))   return IMG.mukh;
+    if (cat.includes('عود') || cat.includes('حرم')) return IMG.oud;
+    if (cat.includes('خمرة') || cat.includes('لمسة')) return IMG.khomra;
+    return 'logo.png';
+  };
+  /* صورة المنتج: حقل image اختياري ← وإلا images/الآيدي.jpg ← وإلا صورة التصنيف */
+  const imgFor = p => p.image || `images/${p.id}.jpg`;
+  const imgFallback = p => `this.onerror=null;this.src='${catImage(p.category)}'`;
 
   const $ = s => document.querySelector(s);
   const $$ = s => [...document.querySelectorAll(s)];
@@ -24,7 +46,6 @@
 
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 
-  /* ── تطبيع النص العربي للبحث الذكي ── */
   const AR = '٠١٢٣٤٥٦٧٨٩';
   const normalize = t => (t || '').toString()
     .replace(/[\u064B-\u0652\u0640]/g, '')
@@ -33,7 +54,6 @@
     .replace(/[٠-٩]/g, d => AR.indexOf(d))
     .trim();
 
-  /* ── تحميل البيانات ── */
   async function loadData() {
     try {
       const res = await fetch('products.json');
@@ -59,7 +79,6 @@
     (state.activeCat === 'all' || p.category === state.activeCat) &&
     (!state.query || p._search.includes(state.query)));
 
-  /* ── الفلاتر العلوية ── */
   function buildChips() {
     const cats = [...new Set(state.products.map(p => p.category))];
     chipsBox.innerHTML = chipHTML('all', 'كل المنتجات', 0) +
@@ -77,7 +96,6 @@
     applyFilters();
   });
 
-  /* ── قائمة المنتجات مجمّعة بالفئات ── */
   function buildIndex(filtered) {
     const groups = new Map();
     filtered.forEach(p => {
@@ -91,12 +109,12 @@
         ${items.map(p => `
           <button type="button" class="idx-item${p.id === state.selectedId ? ' active' : ''}"
                   data-id="${p.id}" style="animation-delay:${Math.min(i++ * 40, 400)}ms">
-            <span class="idx-dot" aria-hidden="true">✦</span><span>${esc(p.name)}</span>
+            <span class="idx-thumb"><img src="${imgFor(p)}" onerror="${imgFallback(p)}" alt="" loading="lazy"></span>
+            <span>${esc(p.name)}</span>
           </button>`).join('')}
       </div>`).join('');
   }
 
-  /* ── لوحة التفاصيل ── */
   function renderDetail(p) {
     const catProducts = state.products.filter(x => x.category === p.category);
     const prices = p.sizes.map(s => Number(s.price));
@@ -108,6 +126,9 @@
       <div class="detail-top">
         <span class="badge">✦ ${esc(p.category)}</span>
         <span class="detail-count">${catProducts.length} منتجات في هذه الفئة</span>
+      </div>
+      <div class="detail-media">
+        <img class="detail-img" src="${imgFor(p)}" onerror="${imgFallback(p)}" alt="${esc(p.name)}">
       </div>
       <h3 class="detail-name">${esc(p.name)}</h3>
       <p class="detail-tag">${esc(p.tagline)}</p>
@@ -207,7 +228,6 @@
     if (e.target.closest('[data-share]')) shareProduct(p);
   });
 
-  /* ── نسخ ومشاركة ── */
   const productText = p =>
     `${p.name} — ${p.category}\n` +
     p.sizes.map(s => `${s.size} : ${s.price} ${currency}`).join('\n') +
@@ -236,7 +256,6 @@
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
   }
 
-  /* ── الوضع الليلي ── */
   const setTheme = t => {
     document.documentElement.dataset.theme = t;
     try { localStorage.setItem('durar-theme', t); } catch { /* خاص */ }
@@ -250,7 +269,6 @@
   $('#themeToggle').addEventListener('click', () =>
     setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
 
-  /* ── الجزيئات العائمة ── */
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const box = $('#particles');
     for (let i = 0; i < 26; i++) {
@@ -262,7 +280,6 @@
     }
   }
 
-  /* ── التمرير ── */
   const header = $('#siteHeader'), backTop = $('#backTop');
   addEventListener('scroll', () => {
     header.classList.toggle('scrolled', scrollY > 12);
@@ -275,7 +292,6 @@
     { threshold: 0.12 });
   $$('.fade-section').forEach(el => io.observe(el));
 
-  /* ── التواصل ── */
   const waHref = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent('السلام عليكم، أرغب في الاستفسار عن منتجات درر للعطور والبخور')}`;
   ['#waFloat', '#waLink'].forEach(s => $(s).href = waHref);
   ['#phoneFloat', '#phoneLink'].forEach(s => $(s).href = `tel:${CONFIG.phone}`);
