@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   درر للعطور والبخور — script.js (مع الصور)
+   درر للعطور والبخور — script.js (Final: كاروسيل + 11 صورة)
    ═══════════════════════════════════════════ */
 (() => {
   'use strict';
@@ -10,26 +10,38 @@
     devWhatsapp: '249998989999'    // واتساب المطور
   };
 
-  /* ── صور افتراضية حسب التصنيف ── */
+  /* ── صورة خاصة لكل قسم (بدون تكرار) ── */
   const IMG = {
-    khomra:  'images/khomra.jpg',
-    french:  'images/french.jpg',
-    dilka:   'images/dilka.jpg',
-    bakhoor: 'images/bakhoor.jpg',
-    oud:     'images/oud.jpg',
-    mukh:    'images/mukh.jpg'
+    'الخمرة السودانية':  'images/khomra.jpg',
+    'الخمر الفرنسية':     'images/french.jpg',
+    'الدلكة السودانية':  'images/dilka.jpg',
+    'دلكة محلب':         'images/dilka-mahlab.jpg',
+    'البخورات':          'images/bakhoor.jpg',
+    'بخورات العنفر':     'images/anbar.jpg',
+    'بخورات الصندل':     'images/sandal.jpg',
+    'عود الحرم':         'images/oud.jpg',
+    'اعود الحرم':        'images/oud-haram.jpg',
+    'مخمريه العروس جات': 'images/mukh.jpg',
+    'لمسة محلب':         'images/lamsa.jpg'
   };
+
   const catImage = cat => {
-    cat = cat || '';
-    if (cat.includes('فرنسية')) return IMG.french;
-    if (cat.includes('دلكة'))   return IMG.dilka;
-    if (cat.includes('بخور') || cat.includes('عنفر') || cat.includes('صندل')) return IMG.bakhoor;
-    if (cat.includes('مخمر'))   return IMG.mukh;
-    if (cat.includes('عود') || cat.includes('حرم')) return IMG.oud;
-    if (cat.includes('خمرة') || cat.includes('لمسة')) return IMG.khomra;
+    const c = (cat || '').trim();
+    if (IMG[c]) return IMG[c];
+    if (c.includes('فرنسية')) return IMG['الخمر الفرنسية'];
+    if (c.includes('دلكة') && c.includes('محلب')) return IMG['دلكة محلب'];
+    if (c.includes('دلكة'))   return IMG['الدلكة السودانية'];
+    if (c.includes('عنفر'))   return IMG['بخورات العنفر'];
+    if (c.includes('صندل'))   return IMG['بخورات الصندل'];
+    if (c.includes('بخور'))   return IMG['البخورات'];
+    if (c.includes('مخمر'))   return IMG['مخمريه العروس جات'];
+    if (c.includes('حرم'))    return IMG['عود الحرم'];
+    if (c.includes('لمسة'))   return IMG['لمسة محلب'];
+    if (c.includes('خمرة'))   return IMG['الخمرة السودانية'];
     return 'logo.png';
   };
-  /* صورة المنتج: حقل image اختياري ← وإلا images/الآيدي.jpg ← وإلا صورة التصنيف */
+
+  /* صورة المنتج: حقل image ← images/الآيدي.jpg ← صورة القسم */
   const imgFor = p => p.image || `images/${p.id}.jpg`;
   const imgFallback = p => `this.onerror=null;this.src='${catImage(p.category)}'`;
 
@@ -42,11 +54,14 @@
   const indexBox = $('#catalogIndex'), detailBox = $('#catalogDetail'),
         layout = $('#catalogLayout'), chipsBox = $('#chips'), emptyBox = $('#empty'),
         input = $('#searchInput'), clearBtn = $('#searchClear'),
-        countEl = $('#resultCount'), toast = $('#toast');
+        countEl = $('#resultCount'), toast = $('#toast'),
+        carousel = $('#catCarousel');
 
-  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  let suppressScroll = false;
 
-  const AR = '٠١٢٣٤٥٦٧٨٩';
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+
+  const AR = '٠١٢٤٥٦٧٨٩';
   const normalize = t => (t || '').toString()
     .replace(/[\u064B-\u0652\u0640]/g, '')
     .replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي')
@@ -54,6 +69,7 @@
     .replace(/[٠-٩]/g, d => AR.indexOf(d))
     .trim();
 
+  /* ── تحميل البيانات ── */
   async function loadData() {
     try {
       const res = await fetch('products.json');
@@ -67,6 +83,7 @@
       }));
       state.products.forEach(p => state.byId.set(p.id, p));
       buildChips();
+      buildCarousel();
       applyFilters(true);
     } catch {
       layout.hidden = true;
@@ -79,6 +96,7 @@
     (state.activeCat === 'all' || p.category === state.activeCat) &&
     (!state.query || p._search.includes(state.query)));
 
+  /* ── الفلاتر ── */
   function buildChips() {
     const cats = [...new Set(state.products.map(p => p.category))];
     chipsBox.innerHTML = chipHTML('all', 'كل المنتجات', 0) +
@@ -89,13 +107,68 @@
 
   chipsBox.addEventListener('click', e => {
     const chip = e.target.closest('.chip');
-    if (!chip) return;
-    $$('.chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    state.activeCat = chip.dataset.cat;
-    applyFilters();
+    if (chip) setActiveCat(chip.dataset.cat, true);
   });
 
+  /* ── الكاروسيل ── */
+  function buildCarousel() {
+    const cats = [...new Set(state.products.map(p => p.category))];
+    carousel.innerHTML = cats.map((c, i) => {
+      const count = state.products.filter(p => p.category === c).length;
+      return `
+      <div class="cat-slide" data-cat="${c}" style="animation-delay:${i * 60}ms">
+        <img src="${catImage(c)}" alt="${esc(c)}" loading="lazy">
+        <span class="cat-count">${count} منتج</span>
+        <span class="cat-slide-name">${esc(c)}</span>
+      </div>`;
+    }).join('');
+  }
+
+  carousel.addEventListener('click', e => {
+    const slide = e.target.closest('.cat-slide');
+    if (slide) setActiveCat(slide.dataset.cat, true);
+  });
+
+  /* عند السحب: اكتشف القسم الأوسط وفعّله */
+  let scrollTimer;
+  carousel.addEventListener('scroll', () => {
+    if (suppressScroll) return;
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      const r0 = carousel.getBoundingClientRect();
+      const center = r0.left + r0.width / 2;
+      let best = null, bestD = Infinity;
+      carousel.querySelectorAll('.cat-slide').forEach(s => {
+        const r = s.getBoundingClientRect();
+        const d = Math.abs((r.left + r.width / 2) - center);
+        if (d < bestD) { bestD = d; best = s; }
+      });
+      if (best && best.dataset.cat !== state.activeCat) {
+        state.activeCat = best.dataset.cat;
+        $$('.chip').forEach(c => c.classList.toggle('active', c.dataset.cat === state.activeCat));
+        $$('.cat-slide').forEach(s => s.classList.toggle('active', s === best));
+        applyFilters();
+      }
+    }, 120);
+  }, { passive: true });
+
+  /* ── تفعيل قسم (مزامنة chips + كاروسيل + منتجات) ── */
+  function setActiveCat(cat, scrollCarousel = false) {
+    state.activeCat = cat;
+    $$('.chip').forEach(c => c.classList.toggle('active', c.dataset.cat === cat));
+    $$('.cat-slide').forEach(s => s.classList.toggle('active', s.dataset.cat === cat));
+    if (scrollCarousel && cat !== 'all') {
+      const el = carousel.querySelector(`.cat-slide[data-cat="${cat}"]`);
+      if (el) {
+        suppressScroll = true;
+        el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        setTimeout(() => suppressScroll = false, 800);
+      }
+    }
+    applyFilters();
+  }
+
+  /* ── قائمة المنتجات مع صور مصغرة ── */
   function buildIndex(filtered) {
     const groups = new Map();
     filtered.forEach(p => {
@@ -115,6 +188,7 @@
       </div>`).join('');
   }
 
+  /* ── لوحة التفاصيل مع الصورة ── */
   function renderDetail(p) {
     const catProducts = state.products.filter(x => x.category === p.category);
     const prices = p.sizes.map(s => Number(s.price));
@@ -209,9 +283,8 @@
     input.value = b.dataset.q; state.query = normalize(b.dataset.q); applyFilters(); input.focus();
   }));
   $('#resetFilters').addEventListener('click', () => {
-    input.value = ''; state.query = ''; state.activeCat = 'all';
-    $$('.chip').forEach(c => c.classList.toggle('active', c.dataset.cat === 'all'));
-    applyFilters();
+    input.value = ''; state.query = '';
+    setActiveCat('all');
   });
 
   indexBox.addEventListener('click', e => {
