@@ -22,8 +22,9 @@
     'بخورات القهوه':     'images/oud-haram.jpg',
     'مخمريات نسائيه':    'images/mukh.jpg',
     'لمسة محلب':         'images/lamsa.jpg',
-    'بخاخات درر':        'images/french.jpg',
-    'مرشات':             'images/lamsa.jpg'
+    'بخاخات درر':        'images/oud.jpg',
+    'مرشات':             'images/marash.jpg'
+    
   };
 
   const catImage = cat => {
