@@ -1,6 +1,4 @@
-/* ═══════════════════════════════════════════
-   درر — Soft UI Edition
-   ═══════════════════════════════════════════ */
+/* ═══ درر — Soft UI Final (Dark Mode + Reveal) ═══ */
 (() => {
   'use strict';
 
@@ -25,12 +23,7 @@
     'مرشات':             'images/marash.jpg'
   };
 
-  const catImage = cat => {
-    const c = (cat || '').trim();
-    if (IMG[c]) return IMG[c];
-    return 'logo.png';
-  };
-
+  const catImage = cat => IMG[(cat || '').trim()] || 'logo.png';
   const imgFor = p => p.image || `images/${p.id}.jpg`;
   const imgFallback = p => `this.onerror=null;this.src='${catImage(p.category)}'`;
 
@@ -42,11 +35,9 @@
 
   const indexBox = $('#catalogIndex'), detailBox = $('#catalogDetail'),
         layout = $('#catalogLayout'), chipsBox = $('#chips'), emptyBox = $('#empty'),
-        toast = $('#toast'),
-        carousel = $('#catCarousel');
+        toast = $('#toast'), carousel = $('#catCarousel');
 
   let suppressScroll = false;
-
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 
   async function loadData() {
@@ -57,12 +48,9 @@
       currency = data.currency || 'جنيه';
       state.products = data.products.map(p => ({ ...p }));
       state.products.forEach(p => state.byId.set(p.id, p));
-      buildChips();
-      buildCarousel();
-      applyFilters(true);
+      buildChips(); buildCarousel(); applyFilters(true);
     } catch {
-      layout.hidden = true;
-      emptyBox.hidden = false;
+      layout.hidden = true; emptyBox.hidden = false;
     }
   }
 
@@ -71,11 +59,10 @@
 
   function buildChips() {
     const cats = [...new Set(state.products.map(p => p.category))];
-    chipsBox.innerHTML = chipHTML('all', 'كل المنتجات', 0) +
-      cats.map((c, i) => chipHTML(c, c, i + 1)).join('');
+    chipsBox.innerHTML = chipHTML('all','كل المنتجات',0) + cats.map((c,i)=>chipHTML(c,c,i+1)).join('');
   }
-  const chipHTML = (v, l, i) =>
-    `<button type="button" class="chip${v === 'all' ? ' active' : ''}" data-cat="${v}" style="animation-delay:${i * 40}ms">${esc(l)}</button>`;
+  const chipHTML = (v,l,i) =>
+    `<button type="button" class="chip${v==='all'?' active':''}" data-cat="${v}">${esc(l)}</button>`;
 
   chipsBox.addEventListener('click', e => {
     const chip = e.target.closest('.chip');
@@ -84,10 +71,10 @@
 
   function buildCarousel() {
     const cats = [...new Set(state.products.map(p => p.category))];
-    carousel.innerHTML = cats.map((c, i) => {
+    carousel.innerHTML = cats.map(c => {
       const count = state.products.filter(p => p.category === c).length;
       return `
-      <div class="cat-slide" data-cat="${c}" style="animation-delay:${i * 60}ms">
+      <div class="cat-slide" data-cat="${c}">
         <img src="${catImage(c)}" alt="${esc(c)}" loading="lazy">
         <span class="cat-count">${count}</span>
         <span class="cat-slide-name">${esc(c)}</span>
@@ -130,7 +117,7 @@
       const el = carousel.querySelector(`.cat-slide[data-cat="${cat}"]`);
       if (el) {
         suppressScroll = true;
-        el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        el.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
         setTimeout(() => suppressScroll = false, 800);
       }
     }
@@ -166,9 +153,7 @@
         <span class="badge">${esc(p.category)}</span>
         <span class="detail-count">${catProducts.length} منتج في الفئة</span>
       </div>
-      <div class="detail-media">
-        <img class="detail-img" src="${imgFor(p)}" onerror="${imgFallback(p)}" alt="${esc(p.name)}">
-      </div>
+      <div class="detail-media"><img src="${imgFor(p)}" onerror="${imgFallback(p)}" alt="${esc(p.name)}"></div>
       <h3 class="detail-name">${esc(p.name)}</h3>
       <p class="detail-tag">${esc(p.tagline)}</p>
       <div class="detail-keywords">
@@ -183,10 +168,7 @@
       <div class="table-wrap">
         <table class="price-table">
           <thead><tr><th>الحجم</th><th>السعر</th></tr></thead>
-          <tbody>
-            ${p.sizes.map(s =>
-              `<tr><td>${esc(s.size)}</td><td>${esc(s.price)} ${currency}</td></tr>`).join('')}
-          </tbody>
+          <tbody>${p.sizes.map(s => `<tr><td>${esc(s.size)}</td><td>${esc(s.price)} ${currency}</td></tr>`).join('')}</tbody>
         </table>
       </div>
       <div class="card-actions">
@@ -207,8 +189,7 @@
       <div class="related">
         <p class="related-title">منتجات أخرى في نفس الفئة</p>
         <div class="related-list">
-          ${catProducts.filter(x => x.id !== p.id)
-            .map(x => `<button type="button" class="related-btn" data-id="${x.id}">${esc(x.name)}</button>`).join('')}
+          ${catProducts.filter(x => x.id !== p.id).map(x => `<button type="button" class="related-btn" data-id="${x.id}">${esc(x.name)}</button>`).join('')}
         </div>
       </div>` : ''}
     </article>`;
@@ -219,19 +200,15 @@
     $$('.idx-item').forEach(b => b.classList.toggle('active', b.dataset.id === id));
     renderDetail(state.byId.get(id));
     if (scrollToDetail && innerWidth < 1024) {
-      detailBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      detailBox.scrollIntoView({ behavior:'smooth', block:'start' });
     }
   }
 
   function applyFilters(initial = false) {
     const filtered = getFiltered();
-
-    if (!filtered.length) {
-      layout.hidden = true; emptyBox.hidden = false; return;
-    }
+    if (!filtered.length) { layout.hidden = true; emptyBox.hidden = false; return; }
     layout.hidden = false; emptyBox.hidden = true;
     buildIndex(filtered);
-
     const stillVisible = filtered.some(p => p.id === state.selectedId);
     if (initial || !stillVisible) select(filtered[0].id);
   }
@@ -268,9 +245,8 @@
     }
   }
   async function shareProduct(p) {
-    if (navigator.share) {
-      try { await navigator.share({ title: p.name, text: productText(p) }); } catch {}
-    } else copyProduct(p);
+    if (navigator.share) { try { await navigator.share({ title: p.name, text: productText(p) }); } catch {} }
+    else copyProduct(p);
   }
 
   let toastTimer;
@@ -280,18 +256,34 @@
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
   }
 
-  // Mobile menu
-  $('#mobileToggle').addEventListener('click', () => {
-    $('.nav-links').classList.toggle('open');
-  });
-  $$('.nav-links a').forEach(a => a.addEventListener('click', () => {
-    $('.nav-links').classList.remove('open');
-  }));
+  /* ── الوضع الليلي ── */
+  const setTheme = t => {
+    document.documentElement.dataset.theme = t;
+    try { localStorage.setItem('durar-theme', t); } catch {}
+  };
+  setTheme((() => {
+    try {
+      return localStorage.getItem('durar-theme') ||
+        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    } catch { return 'light'; }
+  })());
+  $('#themeToggle').addEventListener('click', () =>
+    setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
 
-  // Contact links
+  /* ── القائمة الجوالة ── */
+  $('#mobileToggle').addEventListener('click', () => $('#navLinks').classList.toggle('open'));
+  $$('#navLinks a').forEach(a => a.addEventListener('click', () => $('#navLinks').classList.remove('open')));
+
+  /* ── أنيميشن الظهور ── */
+  const io = new IntersectionObserver(entries =>
+    entries.forEach(en => en.isIntersecting && en.target.classList.add('inview')),
+    { threshold: 0.15 });
+  $$('.reveal').forEach(el => io.observe(el));
+
+  /* ── الروابط ── */
   const waHref = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent('السلام عليكم، أرغب في الاستفسار')}`;
   ['#waFloat', '#waMain'].forEach(s => $(s).href = waHref);
-  ['#phoneMain'].forEach(s => $(s).href = `tel:${CONFIG.phone}`);
+  $('#phoneMain').href = `tel:${CONFIG.phone}`;
   $('#year').textContent = new Date().getFullYear();
   $('#devWa').href = `https://wa.me/${CONFIG.devWhatsapp}?text=${encodeURIComponent('السلام عليكم، بخصوص تطوير موقع درر')}`;
 
