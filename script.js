@@ -1,16 +1,15 @@
 /* ═══════════════════════════════════════════
-   درر للعطور والبخور — script.js (بدون بحث)
+   درر — Soft UI Edition
    ═══════════════════════════════════════════ */
 (() => {
   'use strict';
 
   const CONFIG = {
-    whatsapp: '201507794384',      // واتساب الصفحة الأساسي (الطلبات)
-    phone: '+201507794384',        // هاتف الصفحة الأساسي
-    devWhatsapp: '249998989999'    // واتساب المطور anwer ahmed
+    whatsapp: '201507794384',
+    phone: '+201507794384',
+    devWhatsapp: '249998989999'
   };
 
-  /* ── صورة خاصة لكل تصنيف ── */
   const IMG = {
     'الخمرة السودانية':  'images/khomra.jpg',
     'الخمر الفرنسية':     'images/french.jpg',
@@ -24,24 +23,11 @@
     'لمسة محلب':         'images/lamsa.jpg',
     'بخاخات درر':        'images/oud.jpg',
     'مرشات':             'images/marash.jpg'
-    
   };
 
   const catImage = cat => {
     const c = (cat || '').trim();
     if (IMG[c]) return IMG[c];
-    if (c.includes('فرنسية')) return IMG['الخمر الفرنسية'];
-    if (c.includes('دلكة') && c.includes('محلب')) return IMG['دلكة محلب'];
-    if (c.includes('دلكة'))   return IMG['الدلكة السودانية'];
-    if (c.includes('عنفر'))   return IMG['بخورات العنفر'];
-    if (c.includes('صندل'))   return IMG['بخورات الصندل'];
-    if (c.includes('شاف'))    return IMG['بخورات الشاف'];
-    if (c.includes('قهوه') || c.includes('بخور')) return IMG['بخورات القهوه'];
-    if (c.includes('مخمر'))   return IMG['مخمريات نسائيه'];
-    if (c.includes('بخاخ'))   return IMG['بخاخات درر'];
-    if (c.includes('مرش'))    return IMG['مرشات'];
-    if (c.includes('لمسة'))   return IMG['لمسة محلب'];
-    if (c.includes('خمرة'))   return IMG['الخمرة السودانية'];
     return 'logo.png';
   };
 
@@ -63,7 +49,6 @@
 
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 
-  /* ── تحميل البيانات ── */
   async function loadData() {
     try {
       const res = await fetch('products.json');
@@ -78,28 +63,25 @@
     } catch {
       layout.hidden = true;
       emptyBox.hidden = false;
-      emptyBox.querySelector('p').textContent = 'تعذّر تحميل قائمة المنتجات — افتح الموقع عبر خادم محلي (Live Server)';
-    } finally { hideLoader(); }
+    }
   }
 
   const getFiltered = () => state.products.filter(p =>
-    (state.activeCat === 'all' || p.category === state.activeCat));
+    state.activeCat === 'all' || p.category === state.activeCat);
 
-  /* ── الفلاتر العلوية ── */
   function buildChips() {
     const cats = [...new Set(state.products.map(p => p.category))];
     chipsBox.innerHTML = chipHTML('all', 'كل المنتجات', 0) +
       cats.map((c, i) => chipHTML(c, c, i + 1)).join('');
   }
   const chipHTML = (v, l, i) =>
-    `<button type="button" class="chip${v === 'all' ? ' active' : ''}" data-cat="${v}" style="animation-delay:${i * 60}ms">${esc(l)}</button>`;
+    `<button type="button" class="chip${v === 'all' ? ' active' : ''}" data-cat="${v}" style="animation-delay:${i * 40}ms">${esc(l)}</button>`;
 
   chipsBox.addEventListener('click', e => {
     const chip = e.target.closest('.chip');
     if (chip) setActiveCat(chip.dataset.cat, true);
   });
 
-  /* ── الكاروسيل ── */
   function buildCarousel() {
     const cats = [...new Set(state.products.map(p => p.category))];
     carousel.innerHTML = cats.map((c, i) => {
@@ -107,7 +89,7 @@
       return `
       <div class="cat-slide" data-cat="${c}" style="animation-delay:${i * 60}ms">
         <img src="${catImage(c)}" alt="${esc(c)}" loading="lazy">
-        <span class="cat-count">${count} منتج</span>
+        <span class="cat-count">${count}</span>
         <span class="cat-slide-name">${esc(c)}</span>
       </div>`;
     }).join('');
@@ -155,38 +137,34 @@
     applyFilters();
   }
 
-  /* ── قائمة المنتجات مع صور مصغرة ── */
   function buildIndex(filtered) {
     const groups = new Map();
     filtered.forEach(p => {
       if (!groups.has(p.category)) groups.set(p.category, []);
       groups.get(p.category).push(p);
     });
-    let i = 0;
     indexBox.innerHTML = [...groups.entries()].map(([cat, items]) => `
       <div class="idx-group">
-        <div class="idx-cat"><span>✦ ${esc(cat)}</span><span class="idx-count">${items.length}</span></div>
+        <div class="idx-cat"><span>${esc(cat)}</span><span class="idx-count">${items.length}</span></div>
         ${items.map(p => `
-          <button type="button" class="idx-item${p.id === state.selectedId ? ' active' : ''}"
-                  data-id="${p.id}" style="animation-delay:${Math.min(i++ * 40, 400)}ms">
+          <button type="button" class="idx-item${p.id === state.selectedId ? ' active' : ''}" data-id="${p.id}">
             <span class="idx-thumb"><img src="${imgFor(p)}" onerror="${imgFallback(p)}" alt="" loading="lazy"></span>
             <span>${esc(p.name)}</span>
           </button>`).join('')}
       </div>`).join('');
   }
 
-  /* ── لوحة التفاصيل مع الصورة ── */
   function renderDetail(p) {
     const catProducts = state.products.filter(x => x.category === p.category);
     const prices = p.sizes.map(s => Number(s.price));
     const min = Math.min(...prices), max = Math.max(...prices);
-    const waText = encodeURIComponent(`السلام عليكم، أرغب في طلب: ${p.name} — درر للعطور والبخور`);
+    const waText = encodeURIComponent(`السلام عليكم، أرغب في طلب: ${p.name}`);
 
     detailBox.innerHTML = `
     <article class="detail-card">
       <div class="detail-top">
-        <span class="badge">✦ ${esc(p.category)}</span>
-        <span class="detail-count">${catProducts.length} منتجات في هذه الفئة</span>
+        <span class="badge">${esc(p.category)}</span>
+        <span class="detail-count">${catProducts.length} منتج في الفئة</span>
       </div>
       <div class="detail-media">
         <img class="detail-img" src="${imgFor(p)}" onerror="${imgFallback(p)}" alt="${esc(p.name)}">
@@ -198,37 +176,36 @@
         ${p.weight ? `<span class="kw">${esc(p.weight)}</span>` : ''}
       </div>
       <div class="detail-stats">
-        <div class="stat"><b>${p.sizes.length}</b><span>أحجام متوفرة</span></div>
-        <div class="stat"><b>${min}</b><span>أقل سعر (${currency})</span></div>
-        <div class="stat"><b>${max}</b><span>أعلى سعر (${currency})</span></div>
+        <div class="stat"><b>${p.sizes.length}</b><span>أحجام</span></div>
+        <div class="stat"><b>${min}</b><span>يبدأ من</span></div>
+        <div class="stat"><b>${max}</b><span>حتى</span></div>
       </div>
       <div class="table-wrap">
         <table class="price-table">
-          <thead><tr><th scope="col">الحجم</th><th scope="col">السعر</th></tr></thead>
+          <thead><tr><th>الحجم</th><th>السعر</th></tr></thead>
           <tbody>
-            ${p.sizes.map((s, i) =>
-              `<tr style="--i:${i}"><td>${esc(s.size)}</td><td>${esc(s.price)} ${currency}</td></tr>`).join('')}
+            ${p.sizes.map(s =>
+              `<tr><td>${esc(s.size)}</td><td>${esc(s.price)} ${currency}</td></tr>`).join('')}
           </tbody>
         </table>
       </div>
       <div class="card-actions">
-        <button type="button" class="act-btn" data-copy aria-label="نسخ بيانات ${esc(p.name)}">
-          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        <button type="button" class="act-btn" data-copy>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           نسخ
         </button>
-        <button type="button" class="act-btn" data-share aria-label="مشاركة ${esc(p.name)}">
-          <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.7l6.8-4.4M8.6 13.3l6.8 4.4"/></svg>
+        <button type="button" class="act-btn" data-share>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
           مشاركة
         </button>
-        <a class="act-btn wa" href="https://wa.me/${CONFIG.whatsapp}?text=${waText}"
-           target="_blank" rel="noopener" aria-label="طلب ${esc(p.name)} عبر واتساب">
-          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9.6 8.4L5 21l1.2-5.4A8.5 8.5 0 1 1 21 11.5z"/></svg>
-          اطلب الآن
+        <a class="act-btn wa" href="https://wa.me/${CONFIG.whatsapp}?text=${waText}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.44-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.08 4.49.7.3 1.26.49 1.7.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.07-.12-.27-.2-.57-.34M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88a9.82 9.82 0 0 1 9.88 9.89c0 5.45-4.44 9.88-9.89 9.88"/></svg>
+          اطلبي الآن
         </a>
       </div>
       ${catProducts.length > 1 ? `
       <div class="related">
-        <p class="related-title">✦ منتجات أخرى في فئة ${esc(p.category)}</p>
+        <p class="related-title">منتجات أخرى في نفس الفئة</p>
         <div class="related-list">
           ${catProducts.filter(x => x.id !== p.id)
             .map(x => `<button type="button" class="related-btn" data-id="${x.id}">${esc(x.name)}</button>`).join('')}
@@ -241,7 +218,7 @@
     state.selectedId = id;
     $$('.idx-item').forEach(b => b.classList.toggle('active', b.dataset.id === id));
     renderDetail(state.byId.get(id));
-    if (scrollToDetail && innerWidth < 920) {
+    if (scrollToDetail && innerWidth < 1024) {
       detailBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
@@ -259,9 +236,7 @@
     if (initial || !stillVisible) select(filtered[0].id);
   }
 
-  $('#resetFilters').addEventListener('click', () => {
-    setActiveCat('all');
-  });
+  $('#resetFilters').addEventListener('click', () => setActiveCat('all'));
 
   indexBox.addEventListener('click', e => {
     const item = e.target.closest('.idx-item');
@@ -277,15 +252,14 @@
     if (e.target.closest('[data-share]')) shareProduct(p);
   });
 
-  /* ── نسخ ومشاركة ── */
   const productText = p =>
     `${p.name} — ${p.category}\n` +
     p.sizes.map(s => `${s.size} : ${s.price} ${currency}`).join('\n') +
-    `\n✦ درر للعطور والبخور`;
+    `\nدرر للعطور والبخور`;
 
   function copyProduct(p) {
     const text = productText(p);
-    const done = () => showToast('تم نسخ بيانات المنتج ✦');
+    const done = () => showToast('تم نسخ البيانات');
     if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(done);
     else {
       const ta = document.createElement('textarea');
@@ -295,7 +269,7 @@
   }
   async function shareProduct(p) {
     if (navigator.share) {
-      try { await navigator.share({ title: p.name, text: productText(p) }); } catch { /* أُلغيت */ }
+      try { await navigator.share({ title: p.name, text: productText(p) }); } catch {}
     } else copyProduct(p);
   }
 
@@ -306,53 +280,20 @@
     toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
   }
 
-  /* ── الوضع الليلي ── */
-  const setTheme = t => {
-    document.documentElement.dataset.theme = t;
-    try { localStorage.setItem('durar-theme', t); } catch { /* خاص */ }
-  };
-  setTheme((() => {
-    try {
-      return localStorage.getItem('durar-theme') ||
-        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    } catch { return 'light'; }
-  })());
-  $('#themeToggle').addEventListener('click', () =>
-    setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+  // Mobile menu
+  $('#mobileToggle').addEventListener('click', () => {
+    $('.nav-links').classList.toggle('open');
+  });
+  $$('.nav-links a').forEach(a => a.addEventListener('click', () => {
+    $('.nav-links').classList.remove('open');
+  }));
 
-  /* ── الجزيئات العائمة ── */
-  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const box = $('#particles');
-    for (let i = 0; i < 26; i++) {
-      const s = document.createElement('span');
-      const size = 3 + Math.random() * 7;
-      s.style.cssText = `left:${Math.random() * 100}%;width:${size}px;height:${size}px;
-        animation-duration:${7 + Math.random() * 10}s;animation-delay:${Math.random() * 9}s;`;
-      box.appendChild(s);
-    }
-  }
-
-  /* ── التمرير ── */
-  const header = $('#siteHeader'), backTop = $('#backTop');
-  addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', scrollY > 12);
-    backTop.hidden = scrollY < 500;
-  }, { passive: true });
-  backTop.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
-
-  const io = new IntersectionObserver(entries =>
-    entries.forEach(en => en.isIntersecting && en.target.classList.add('inview')),
-    { threshold: 0.12 });
-  $$('.fade-section').forEach(el => io.observe(el));
-
-  /* ── روابط التواصل ── */
-  const waHref = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent('السلام عليكم، أرغب في الاستفسار عن منتجات درر للعطور والبخور')}`;
-  ['#waFloat', '#waLink'].forEach(s => $(s).href = waHref);
-  ['#phoneFloat', '#phoneLink'].forEach(s => $(s).href = `tel:${CONFIG.phone}`);
+  // Contact links
+  const waHref = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent('السلام عليكم، أرغب في الاستفسار')}`;
+  ['#waFloat', '#waMain'].forEach(s => $(s).href = waHref);
+  ['#phoneMain'].forEach(s => $(s).href = `tel:${CONFIG.phone}`);
   $('#year').textContent = new Date().getFullYear();
-  $('#devWa').href = `https://wa.me/${CONFIG.devWhatsapp}?text=${encodeURIComponent('السلام عليكم، بخصوص تطوير موقع درر للعطور والبخور')}`;
-
-  function hideLoader() { setTimeout(() => $('#loader').classList.add('done'), 450); }
+  $('#devWa').href = `https://wa.me/${CONFIG.devWhatsapp}?text=${encodeURIComponent('السلام عليكم، بخصوص تطوير موقع درر')}`;
 
   loadData();
 })();
