@@ -1,175 +1,216 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="light">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>درر للعطور والبخور | عطور وبخور سودانية فاخرة</title>
-<meta name="description" content="درر للعطور والبخور — خمرة سودانية، عطور فرنسية، دلكة، بخور، مرشات ومخمريات فاخرة. تصفح دليل المنتجات الكامل بالأسعار.">
-<meta name="keywords" content="درر, عطور, بخور, خمرة, دلكة, مخمرية, مرشات, عود, مسك, السودان">
-<meta property="og:title" content="درر للعطور والبخور">
-<meta property="og:description" content="دليل منتجات درر للعطور والبخور — فخامة سودانية أصيلة.">
-<meta property="og:type" content="website">
-<meta name="theme-color" content="#c9a227">
+<title>درر للعطور والبخور — فخامة سودانية أصيلة</title>
+<meta name="description" content="درر للعطور والبخور — خمرة سودانية، عطور فرنسية، دلكة، بخور، مرشات ومخمريات فاخرة.">
+<meta name="theme-color" content="#E8B4B8">
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"LocalBusiness","name":"درر للعطور والبخور","description":"عطور وبخور سودانية فاخرة"}
-</script>
 </head>
 <body>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#f7e7a0"/><stop offset=".45" stop-color="#c9a227"/>
-      <stop offset=".75" stop-color="#a67c00"/><stop offset="1" stop-color="#e9cf6b"/>
-    </linearGradient>
-  </defs>
-</svg>
-
-<!-- Loading -->
-<div id="loader" role="status" aria-label="جارٍ التحميل">
-  <img src="logo.png" alt="درر للعطور والبخور" class="loader-crest">
-  <p class="loader-brand">درر للعطور والبخور</p>
-  <span class="loader-ring" aria-hidden="true"></span>
-</div>
-
-<!-- Header -->
-<header id="siteHeader">
-  <div class="container header-inner">
-    <a href="#home" class="brand">
-      <img src="logo.png" alt="" class="brand-crest">
-      <span class="brand-name">درر <small>للعطور والبخور</small></span>
+<!-- Navigation -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="logo">
+      <img src="logo.png" alt="">
+      <span>درر</span>
     </a>
-    <nav class="main-nav" aria-label="التنقل الرئيسي">
-      <a href="#home">الرئيسية</a>
-      <a href="#catalog">دليل المنتجات</a>
-      <a href="#about">من نحن</a>
-      <a href="#contact">تواصل معنا</a>
-    </nav>
-    <button id="themeToggle" class="icon-btn" type="button" aria-label="تبديل الوضع الليلي">
-      <svg class="ic-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg class="ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+    <div class="nav-links">
+      <a href="#services">المنتجات</a>
+      <a href="#testimonials">آراء العملاء</a>
+      <a href="#booking">اطلب الآن</a>
+      <a href="#contact">تواصل</a>
+    </div>
+    <a href="#booking" class="btn btn-nav">احجزي طلبك</a>
+    <button class="mobile-toggle" aria-label="القائمة" id="mobileToggle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
   </div>
-</header>
+</nav>
 
-<main>
-  <!-- Hero -->
-  <section id="home" class="hero">
-    <div id="particles" aria-hidden="true"></div>
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg-blob"></div>
+  <div class="container hero-grid">
     <div class="hero-content">
-      <img src="logo.png" alt="شعار درر للعطور والبخور" class="hero-crest">
-      <h1 class="hero-title">درر للعطور والبخور</h1>
-      <svg class="ornament" viewBox="0 0 260 24" aria-hidden="true">
-        <path d="M0 12h96M164 12h260" stroke="url(#goldGrad)" stroke-width="1.4"/>
-        <path d="M130 2l9 10-9 10-9-10z" fill="url(#goldGrad)"/>
-        <circle cx="106" cy="12" r="2.6" fill="url(#goldGrad)"/><circle cx="154" cy="12" r="2.6" fill="url(#goldGrad)"/>
-      </svg>
-      <p class="hero-tag">فخامة سودانية أصيلة.. عطور، بخور، دلكة ومخمريات تليق بكم</p>
+      <span class="eyebrow">فخامة سودانية أصيلة منذ سنوات</span>
+      <h1 class="hero-title">حيث تسكن<br><em>الفخامة</em> في التفاصيل</h1>
+      <p class="hero-lead">عطور، بخور، دلكة ومخمريات مصنوعة بعناية من أجود المكونات السودانية والفرنسية لتناسب أجمل لحظاتك.</p>
+      <div class="hero-cta">
+        <a href="#services" class="btn btn-primary">تصفّحي المنتجات</a>
+        <a href="#booking" class="btn btn-ghost">اطلبي الآن</a>
+      </div>
+      <div class="hero-trust">
+        <div class="rating">
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L10 15.8l-5.8 3 1.1-6.4L.6 7.8l6.5-.9z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L10 15.8l-5.8 3 1.1-6.4L.6 7.8l6.5-.9z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L10 15.8l-5.8 3 1.1-6.4L.6 7.8l6.5-.9z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L10 15.8l-5.8 3 1.1-6.4L.6 7.8l6.5-.9z"/></svg>
+          <svg viewBox="0 0 20 20"><path d="M10 1l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4L10 15.8l-5.8 3 1.1-6.4L.6 7.8l6.5-.9z"/></svg>
+        </div>
+        <span>4.9 من أكثر من 1,200 عميلة</span>
+      </div>
     </div>
-    <a href="#catalog" class="scroll-hint" aria-label="انتقل للأسفل">
-      <svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-    </a>
-  </section>
+    <div class="hero-visual">
+      <div class="hero-blob"></div>
+      <img src="logo.png" alt="شعار درر" class="hero-logo">
+      <div class="hero-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>منتج يدوي 100%</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <!-- Catalog -->
-  <section id="catalog" class="container catalog-section">
-    <div class="section-head fade-section">
-      <svg class="ornament" viewBox="0 0 260 24" aria-hidden="true"><path d="M0 12h96M164 12h260" stroke="url(#goldGrad)" stroke-width="1.4"/><path d="M130 2l9 10-9 10-9-10z" fill="url(#goldGrad)"/><circle cx="106" cy="12" r="2.6" fill="url(#goldGrad)"/><circle cx="154" cy="12" r="2.6" fill="url(#goldGrad)"/></svg>
-      <h2>دليل المنتجات</h2>
-      <svg class="ornament" viewBox="0 0 260 24" aria-hidden="true"><path d="M0 12h96M164 12h260" stroke="url(#goldGrad)" stroke-width="1.4"/><path d="M130 2l9 10-9 10-9-10z" fill="url(#goldGrad)"/><circle cx="106" cy="12" r="2.6" fill="url(#goldGrad)"/><circle cx="154" cy="12" r="2.6" fill="url(#goldGrad)"/></svg>
+<!-- Services / Products Catalog -->
+<section id="services" class="services">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">مجموعتنا الكاملة</span>
+      <h2>دليل المنتجات الفاخرة</h2>
+      <p class="section-lead">اختاري من تشكيلتنا الواسعة — كل قطعة محضّرة بحب وعناية</p>
     </div>
 
-    <div id="chips" class="chips fade-section" role="group" aria-label="تصفية حسب الفئة"></div>
+    <div id="chips" class="chips" role="group" aria-label="تصفية حسب الفئة"></div>
 
-    <!-- كاروسيل الأقسام -->
-    <div class="carousel-wrap fade-section">
+    <!-- Carousel -->
+    <div class="carousel-wrap">
       <div id="catCarousel" class="cat-carousel" aria-label="أقسام المنتجات"></div>
-      <p class="carousel-hint">✦ اسحب يمين أو يسار لاستعراض الأقسام ✦</p>
+      <p class="carousel-hint">اسحبي يمين أو يسار لاستعراض الأقسام</p>
     </div>
 
-    <div class="catalog-layout fade-section" id="catalogLayout">
+    <div class="catalog-layout" id="catalogLayout">
       <aside class="catalog-index" id="catalogIndex" aria-label="قائمة المنتجات"></aside>
       <div class="catalog-detail" id="catalogDetail" aria-live="polite"></div>
     </div>
 
     <div id="empty" class="empty" hidden>
-      <span class="empty-star">✦</span>
-      <p>لا توجد نتائج مطابقة لبحثك</p>
-      <button id="resetFilters" class="btn btn-outline" type="button">عرض كل المنتجات</button>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <p>لا توجد منتجات في هذه الفئة</p>
+      <button id="resetFilters" class="btn btn-ghost">عرض كل المنتجات</button>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- About -->
-  <section id="about" class="container about fade-section">
-    <div class="about-frame">
-      <h2>عن درر</h2>
-      <p>في «درر للعطور والبخور» نصنع الفخامة من تفاصيل صغيرة: خلطات سودانية أصيلة، عطور فرنسية راقية، دلكة وبخور ومخمريات تُحضَّر بعناية لتناسب أجمل مناسباتكم.</p>
-      <ul class="features">
-        <li><span>✦</span> منتجات أصلية بجودة فاخرة</li>
-        <li><span>✦</span> أحجام وأوزان تناسب الجميع</li>
-        <li><span>✦</span> تغليف أنيق يليق بالإهداء</li>
-      </ul>
+<!-- Testimonials -->
+<section id="testimonials" class="testimonials">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">آراء عميلاتنا</span>
+      <h2>قصص من قلب <em>درر</em></h2>
     </div>
-  </section>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"دلكة العروس من درر كانت سر نضارتي ليلة فرحي. كل العرايس بيسألوني عن السر!"</p>
+        <div class="author">
+          <div class="author-avatar">س</div>
+          <div><strong>سارة أحمد</strong><span>عروس 2024</span></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"بخور العود الفاخر 999 يملأ المجلس بعطر لا يُنسى. الجودة فعلاً عالمية."</p>
+        <div class="author">
+          <div class="author-avatar">ف</div>
+          <div><strong>فاطمة محمد</strong><span>عميلة منذ 3 سنوات</span></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"لمسة محلب — رائحة تبقى لأيام. ما جربت حاجة زيها في حياتي."</p>
+        <div class="author">
+          <div class="author-avatar">ن</div>
+          <div><strong>نور الهدى</strong><span>عميلة دائمة</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <!-- Contact -->
-  <section id="contact" class="container contact fade-section">
-    <div class="section-head"><h2>تواصل معنا</h2></div>
+<!-- Booking CTA -->
+<section id="booking" class="booking">
+  <div class="container booking-card">
+    <div class="booking-decor"></div>
+    <div class="booking-content">
+      <span class="eyebrow">جاهزة لطلبك؟</span>
+      <h2>تواصلي معنا الآن</h2>
+      <p>فريقنا جاهز لمساعدتك في اختيار المنتجات المثالية — توصيل لكل السودان.</p>
+      <div class="booking-cta">
+        <a id="waMain" href="#" target="_blank" rel="noopener" class="btn btn-primary btn-lg">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.44-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.08 4.49.7.3 1.26.49 1.7.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.07-.12-.27-.2-.57-.34M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88a9.82 9.82 0 0 1 9.88 9.89c0 5.45-4.44 9.88-9.89 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.44h.01c6.55 0 11.89-5.33 11.89-11.89 0-3.18-1.23-6.16-3.48-8.41z"/></svg>
+          راسلينا على واتساب
+        </a>
+        <a id="phoneMain" href="#" class="btn btn-ghost btn-lg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          اتصال مباشر
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="contact">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">نحن هنا</span>
+      <h2>تواصلي معنا</h2>
+    </div>
     <div class="contact-cards">
       <div class="contact-card">
-        <svg viewBox="0 0 24 24" class="contact-ic" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.44-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.08 4.49.7.3 1.26.49 1.7.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.07-.12-.27-.2-.57-.34M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88a9.82 9.82 0 0 1 9.88 9.89c0 5.45-4.44 9.88-9.89 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.44h.01c6.55 0 11.89-5.33 11.89-11.89 0-3.18-1.23-6.16-3.48-8.41z"/></svg>
-        <h3>واتساب</h3>
-        <p>للطلبات والاستفسار عن الأسعار</p>
-        <a id="waLink" class="btn btn-gold" href="#" target="_blank" rel="noopener">راسلنا واتساب</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <h3>موقعنا</h3>
+        <p>السودان — توصيل لكل الولايات</p>
       </div>
       <div class="contact-card">
-        <svg viewBox="0 0 24 24" class="contact-ic" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.61 21 3 13.39 3 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-        <h3>اتصل بنا</h3>
-        <p>نسعد بخدمتكم في أي وقت</p>
-        <a id="phoneLink" class="btn btn-outline" href="#">اتصال مباشر</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <h3>ساعات العمل</h3>
+        <p>من 9 صباحاً إلى 10 مساءً — يومياً</p>
+      </div>
+      <div class="contact-card">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <h3>اتصلي بنا</h3>
+        <p id="phoneDisplay">+20 150 779 4384</p>
       </div>
     </div>
-  </section>
-</main>
+  </div>
+</section>
 
 <!-- Footer -->
 <footer>
-  <div class="footer-gold-line" aria-hidden="true"></div>
   <div class="container footer-inner">
     <div class="footer-brand">
-      <p class="footer-logo">درر للعطور والبخور</p>
+      <img src="logo.png" alt="" class="footer-logo-img">
       <p class="footer-tag">حيث تسكن الفخامة.. عطور وبخور بذوق سوداني أصيل</p>
     </div>
-    <nav class="footer-links" aria-label="روابط سريعة">
-      <a href="#home">الرئيسية</a><a href="#catalog">دليل المنتجات</a><a href="#about">من نحن</a><a href="#contact">تواصل معنا</a>
+    <nav class="footer-links">
+      <a href="#services">المنتجات</a>
+      <a href="#testimonials">آراء العملاء</a>
+      <a href="#booking">اطلبي</a>
+      <a href="#contact">تواصل</a>
     </nav>
   </div>
   <div class="footer-bottom">
-    <p>© <span id="year"></span> درر للعطور والبخور — جميع الحقوق محفوظة ✦</p>
-    <p class="dev-line">تطوير © anwer ahmed — جميع الحقوق محفوظة ✦ ·
-      <a id="devWa" href="#" target="_blank" rel="noopener">تواصل مع المطور</a>
-    </p>
+    <div class="container">
+      <p>© <span id="year"></span> درر للعطور والبخور — جميع الحقوق محفوظة</p>
+      <p class="dev-line">تطوير © anwer ahmed — <a id="devWa" href="#" target="_blank" rel="noopener">تواصل مع المطور</a></p>
+    </div>
   </div>
 </footer>
 
-<!-- Floating -->
-<a id="waFloat" class="float-btn wa" href="#" target="_blank" rel="noopener" aria-label="واتساب">
-  <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.44-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.08 4.49.7.3 1.26.49 1.7.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.07-.12-.27-.2-.57-.34M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88a9.82 9.82 0 0 1 9.88 9.89c0 5.45-4.44 9.88-9.89 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.44h.01c6.55 0 11.89-5.33 11.89-11.89 0-3.18-1.23-6.16-3.48-8.41z"/></svg>
+<!-- Floating WhatsApp -->
+<a id="waFloat" class="float-btn" href="#" target="_blank" rel="noopener" aria-label="واتساب">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.44-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.08 4.49.7.3 1.26.49 1.7.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.07-.12-.27-.2-.57-.34M12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88a9.82 9.82 0 0 1 9.88 9.89c0 5.45-4.44 9.88-9.89 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.44h.01c6.55 0 11.89-5.33 11.89-11.89 0-3.18-1.23-6.16-3.48-8.41z"/></svg>
 </a>
-<a id="phoneFloat" class="float-btn phone" href="#" aria-label="اتصال هاتفي">
-  <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.61 21 3 13.39 3 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-</a>
-<button id="backTop" class="float-btn top" type="button" aria-label="العودة للأعلى" hidden>
-  <svg viewBox="0 0 24 24"><path d="M12 4l-7 7h4.5v9h5v-9H19z"/></svg>
-</button>
 
 <div id="toast" role="status" aria-live="polite"></div>
-<noscript><p style="text-align:center;padding:2rem">يرجى تفعيل الجافاسكربت لعرض قائمة المنتجات.</p></noscript>
 <script src="script.js" defer></script>
 </body>
 </html>
