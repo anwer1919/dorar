@@ -1,12 +1,12 @@
 /* ═══════════════════════════════════════════
-   درر للعطور والبخور — script.js (Gold + IBM Plex)
+   درر للبخور والعطور السودانيه — script.js (Gold + IBM Plex)
    ═══════════════════════════════════════════ */
 (() => {
   'use strict';
 
   const CONFIG = {
-    whatsapp: '201507794384',      // واتساب الصفحة الأساسي (الطلبات)
-    phone: '+201507794384',        // هاتف الصفحة الأساسي
+    whatsapp: '+249923731371',      // واتساب الصفحة الأساسي (الطلبات)
+    phone: '+249923731371',        // هاتف الصفحة الأساسي
     devWhatsapp: '249998989999'    // واتساب المطور anwer ahmed
   };
 
@@ -179,7 +179,7 @@
     const catProducts = state.products.filter(x => x.category === p.category);
     const prices = p.sizes.map(s => Number(s.price));
     const min = Math.min(...prices), max = Math.max(...prices);
-    const waText = encodeURIComponent(`السلام عليكم، أرغب في طلب: ${p.name} — درر للعطور والبخور`);
+    const waText = encodeURIComponent(`السلام عليكم، أرغب في طلب: ${p.name} — درر للبخور والعطور السودانيه`);
 
     detailBox.innerHTML = `
     <article class="detail-card">
@@ -280,7 +280,7 @@
   const productText = p =>
     `${p.name} — ${p.category}\n` +
     p.sizes.map(s => `${s.size} : ${s.price} ${currency}`).join('\n') +
-    `\nدرر للعطور والبخور`;
+    `\nدرر للبخور والعطور السودانيه`;
 
   function copyProduct(p) {
     const text = productText(p);
@@ -345,7 +345,7 @@
   $$('.fade-section').forEach(el => io.observe(el));
 
   /* ── روابط التواصل ── */
-  const waHref = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent('السلام عليكم، أرغب في الاستفسار عن منتجات درر للعطور والبخور')}`;
+  const waHref = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent('السلام عليكم، أرغب في الاستفسار عن منتجات درر للبخور والعطور السودانيه')}`;
   ['#waFloat', '#waLink'].forEach(s => $(s).href = waHref);
   ['#phoneFloat', '#phoneLink'].forEach(s => $(s).href = `tel:${CONFIG.phone}`);
   $('#year').textContent = new Date().getFullYear();
