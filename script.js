@@ -1,16 +1,16 @@
 /* ═══════════════════════════════════════════
-   درر للبخور والعطور السودانيه — script.js (Gold + IBM Plex)
+   درر للبخور والعطور السودانيه — script.js
    ═══════════════════════════════════════════ */
 (() => {
   'use strict';
 
   const CONFIG = {
-    whatsapp: '+249923731371',      // واتساب الصفحة الأساسي (الطلبات)
-    phone: '+249923731371',        // هاتف الصفحة الأساسي
-    devWhatsapp: '249998989999'    // واتساب المطور anwer ahmed
+    brand: 'درر للبخور والعطور السودانيه',   // ← غيّر الاسم من هنا فقط
+    whatsapp: '201507794384',
+    phone: '+201507794384',
+    devWhatsapp: '249998989999'
   };
 
-  /* ── صورة خاصة لكل تصنيف ── */
   const IMG = {
     'الخمرة السودانية':  'images/khomra.jpg',
     'الخمر الفرنسية':     'images/french.jpg',
@@ -44,8 +44,17 @@
     return 'logo.png';
   };
 
+  /* صورة المنتج: حقل image ← images/{id}.jpg */
   const imgFor = p => p.image || `images/${p.id}.jpg`;
-  const imgFallback = p => `this.onerror=null;this.src='${catImage(p.category)}'`;
+  /* صورة الحجم: حقل image ← images/{id}-s{رقم}.jpg */
+  const sizeImgFor = (p, s, i) => s.image || `images/${p.id}-s${i + 1}.jpg`;
+
+  /* سلسلة البدائل: لو الصورة مش موجودة ← التالية تلقائيًا */
+  window.imgChain = (el, list) => {
+    const n = Number(el.dataset.fi || 0);
+    if (n < list.length) { el.dataset.fi = n + 1; el.src = list[n]; }
+    else { el.onerror = null; el.style.opacity = .35; }
+  };
 
   const $ = s => document.querySelector(s);
   const $$ = s => [...document.querySelectorAll(s)];
@@ -62,7 +71,6 @@
 
   const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
 
-  /* ── تحميل البيانات ── */
   async function loadData() {
     try {
       const res = await fetch('products.json');
@@ -84,7 +92,6 @@
   const getFiltered = () => state.products.filter(p =>
     (state.activeCat === 'all' || p.category === state.activeCat));
 
-  /* ── الفلاتر العلوية ── */
   function buildChips() {
     const cats = [...new Set(state.products.map(p => p.category))];
     chipsBox.innerHTML = chipHTML('all', 'كل المنتجات', 0) +
@@ -98,7 +105,6 @@
     if (chip) setActiveCat(chip.dataset.cat, true);
   });
 
-  /* ── الكاروسيل ── */
   function buildCarousel() {
     const cats = [...new Set(state.products.map(p => p.category))];
     carousel.innerHTML = cats.map((c, i) => {
@@ -154,7 +160,7 @@
     applyFilters();
   }
 
-  /* ── قائمة المنتجات مع صور مصغرة ── */
+  /* ── قائمة المنتجات: صورة مصغرة رئيسية لكل منتج ── */
   function buildIndex(filtered) {
     const groups = new Map();
     filtered.forEach(p => {
@@ -168,18 +174,20 @@
         ${items.map(p => `
           <button type="button" class="idx-item${p.id === state.selectedId ? ' active' : ''}"
                   data-id="${p.id}" style="animation-delay:${Math.min(i++ * 40, 400)}ms">
-            <span class="idx-thumb"><img src="${imgFor(p)}" onerror="${imgFallback(p)}" alt="" loading="lazy"></span>
+            <span class="idx-thumb"><img src="${imgFor(p)}" onerror="imgChain(this, ['${catImage(p.category)}'])" alt="" loading="lazy"></span>
             <span>${esc(p.name)}</span>
           </button>`).join('')}
       </div>`).join('');
   }
 
-  /* ── لوحة التفاصيل مع الصورة ── */
+  /* ── لوحة التفاصيل: صورة رئيسية + صورة لكل حجم ── */
   function renderDetail(p) {
     const catProducts = state.products.filter(x => x.category === p.category);
     const prices = p.sizes.map(s => Number(s.price));
     const min = Math.min(...prices), max = Math.max(...prices);
-    const waText = encodeURIComponent(`السلام عليكم، أرغب في طلب: ${p.name} — درر للبخور والعطور السودانيه`);
+    const prodImg = imgFor(p);
+    const catImg = catImage(p.category);
+    const waText = encodeURIComponent(`السلام عليكم، أرغب في طلب: ${p.name} — ${CONFIG.brand}`);
 
     detailBox.innerHTML = `
     <article class="detail-card">
@@ -188,7 +196,7 @@
         <span class="detail-count">${catProducts.length} منتجات في هذه الفئة</span>
       </div>
       <div class="detail-media">
-        <img class="detail-img" src="${imgFor(p)}" onerror="${imgFallback(p)}" alt="${esc(p.name)}">
+        <img class="detail-img" src="${prodImg}" onerror="imgChain(this, ['${catImg}'])" alt="${esc(p.name)}">
       </div>
       <h3 class="detail-name">${esc(p.name)}</h3>
       <p class="detail-tag">${esc(p.tagline)}</p>
@@ -205,8 +213,16 @@
         <table class="price-table">
           <thead><tr><th scope="col">الحجم</th><th scope="col">السعر</th></tr></thead>
           <tbody>
-            ${p.sizes.map((s, i) =>
-              `<tr style="--i:${i}"><td>${esc(s.size)}</td><td>${esc(s.price)} ${currency}</td></tr>`).join('')}
+            ${p.sizes.map((s, i) => `
+              <tr style="--i:${i}">
+                <td>
+                  <span class="size-cell">
+                    <span class="size-thumb"><img loading="lazy" alt="" src="${sizeImgFor(p, s, i)}" onerror="imgChain(this, ['${prodImg}', '${catImg}'])"></span>
+                    ${esc(s.size)}
+                  </span>
+                </td>
+                <td>${esc(s.price)} ${currency}</td>
+              </tr>`).join('')}
           </tbody>
         </table>
       </div>
@@ -258,9 +274,7 @@
     if (initial || !stillVisible) select(filtered[0].id);
   }
 
-  $('#resetFilters').addEventListener('click', () => {
-    setActiveCat('all');
-  });
+  $('#resetFilters').addEventListener('click', () => setActiveCat('all'));
 
   indexBox.addEventListener('click', e => {
     const item = e.target.closest('.idx-item');
@@ -280,7 +294,7 @@
   const productText = p =>
     `${p.name} — ${p.category}\n` +
     p.sizes.map(s => `${s.size} : ${s.price} ${currency}`).join('\n') +
-    `\nدرر للبخور والعطور السودانيه`;
+    `\n${CONFIG.brand}`;
 
   function copyProduct(p) {
     const text = productText(p);
@@ -345,11 +359,11 @@
   $$('.fade-section').forEach(el => io.observe(el));
 
   /* ── روابط التواصل ── */
-  const waHref = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent('السلام عليكم، أرغب في الاستفسار عن منتجات درر للبخور والعطور السودانيه')}`;
+  const waHref = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(`السلام عليكم، أرغب في الاستفسار عن منتجات ${CONFIG.brand}`)}`;
   ['#waFloat', '#waLink'].forEach(s => $(s).href = waHref);
   ['#phoneFloat', '#phoneLink'].forEach(s => $(s).href = `tel:${CONFIG.phone}`);
   $('#year').textContent = new Date().getFullYear();
-  $('#devWa').href = `https://wa.me/${CONFIG.devWhatsapp}?text=${encodeURIComponent('السلام عليكم، بخصوص تطوير موقع درر للعطور والبخور')}`;
+  $('#devWa').href = `https://wa.me/${CONFIG.devWhatsapp}?text=${encodeURIComponent(`السلام عليكم، بخصوص تطوير موقع ${CONFIG.brand}`)}`;
 
   function hideLoader() { setTimeout(() => $('#loader').classList.add('done'), 450); }
 
