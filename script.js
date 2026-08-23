@@ -105,6 +105,7 @@
     if (chip) setActiveCat(chip.dataset.cat, true);
   });
 
+  /* ── كاروسيل الأقسام ── */
   function buildCarousel() {
     const cats = [...new Set(state.products.map(p => p.category))];
     carousel.innerHTML = cats.map((c, i) => {
@@ -160,7 +161,7 @@
     applyFilters();
   }
 
-  /* ── قائمة المنتجات: صورة مصغرة رئيسية لكل منتج ── */
+  /* ── قائمة المنتجات ── */
   function buildIndex(filtered) {
     const groups = new Map();
     filtered.forEach(p => {
@@ -180,7 +181,7 @@
       </div>`).join('');
   }
 
-  /* ── لوحة التفاصيل: صورة رئيسية + صورة لكل حجم ── */
+  /* ── لوحة التفاصيل: صورة رئيسية + كاروسيل أحجام بالسحب ── */
   function renderDetail(p) {
     const catProducts = state.products.filter(x => x.category === p.category);
     const prices = p.sizes.map(s => Number(s.price));
@@ -209,23 +210,24 @@
         <div class="stat"><b>${min}</b><span>أقل سعر (${currency})</span></div>
         <div class="stat"><b>${max}</b><span>أعلى سعر (${currency})</span></div>
       </div>
-      <div class="table-wrap">
-        <table class="price-table">
-          <thead><tr><th scope="col">الحجم</th><th scope="col">السعر</th></tr></thead>
-          <tbody>
-            ${p.sizes.map((s, i) => `
-              <tr style="--i:${i}">
-                <td>
-                  <span class="size-cell">
-                    <span class="size-thumb"><img loading="lazy" alt="" src="${sizeImgFor(p, s, i)}" onerror="imgChain(this, ['${prodImg}', '${catImg}'])"></span>
-                    ${esc(s.size)}
-                  </span>
-                </td>
-                <td>${esc(s.price)} ${currency}</td>
-              </tr>`).join('')}
-          </tbody>
-        </table>
+
+      <!-- كاروسيل الأحجام: سحب يمين/يسار -->
+      <div class="sizes-carousel" aria-label="أحجام ${esc(p.name)}">
+        ${p.sizes.map((s, i) => `
+          <div class="size-card" style="--i:${i}">
+            <div class="size-media">
+              <img loading="lazy" alt="${esc(p.name)} — ${esc(s.size)}"
+                   src="${sizeImgFor(p, s, i)}"
+                   onerror="imgChain(this, ['${prodImg}', '${catImg}'])">
+            </div>
+            <div class="size-info">
+              <span class="size-name">${esc(s.size)}</span>
+              <span class="size-price">${esc(s.price)} ${currency}</span>
+            </div>
+          </div>`).join('')}
       </div>
+      <p class="sizes-hint">اسحب يمين أو يسار لاستعراض الأحجام والأسعار</p>
+
       <div class="card-actions">
         <button type="button" class="act-btn" data-copy aria-label="نسخ بيانات ${esc(p.name)}">
           <svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
